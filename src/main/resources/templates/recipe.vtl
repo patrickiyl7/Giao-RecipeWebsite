@@ -1,0 +1,425 @@
+
+  <!--中间内容-->
+  <style>
+        body {
+            background-image:url("https://cmkt-image-prd.freetls.fastly.net/0.1.0/ps/7609473/910/1365/m2/fpnw/wm1/xiiozoajkilfl57rd0wudl7luqgqagsmnchsamqrxh00bs41gjtywhqoctm5pg0e-.jpg?1579333360&s=b5f73b635ddb09ed690c04e0d4ad002e");
+            background-size:cover;
+            }
+    </style>
+  <div id="waypoint" class="m-container-small m-padded-tb-big animated fadeIn">
+    <div class="ui container">
+      <div class="ui top attached segment">
+        <div class="ui horizontal link list">
+          <div class="item">
+            <img src="$recipe.getUserImage()" alt="" class="ui avatar image">
+            <div class="content"><a href="#" class="header">$recipe.getUserName()</a></div>
+          </div>
+          <div class="item">
+            <i class="calendar icon"></i> <span th:text="${#dates.format(blog.updateTime,'yyyy-MM-dd')}">$recipe.getDate()</span>
+          </div>
+        </div>
+      </div>
+      <div class="ui attached segment">
+        <!--图片区域-->
+        <img src="$recipe.getFinalImage()" alt="" class="ui fluid rounded image">
+      </div>
+      <div class="ui  attached padded segment">
+        <!--内容-->
+
+        <h2 class="ui center aligned header">$recipe.getTitle()</h2>
+        <br>
+        <!--中间主要内容部分-->
+        <div id="content" class="typo  typo-selection js-toc-content m-padded-lr-responsive m-padded-tb-large" th:utext="${blog.content}">
+
+          <h2 id="section1">Description</h2>
+            <p>$recipe.getDescription()</p>
+          <hr/>
+          
+          <h2 id="section2"> Ingredients </h2>
+          <table class="ui table">
+            <thead>
+            <tr>
+              <th>Name</th>
+              <th>Amount</th>
+              <th>Unit</th>
+            </tr>
+            </thead>
+            <tbody>
+          #foreach ($ingredient in $ingredients)
+            <tr>
+              <td>$ingredient.getIngredientName()</td>
+              <td>$ingredient.getAmount()</td>
+              <td>$ingredient.getUnit()</td>
+            </tr>
+          #end
+            </tbody>
+          </table>
+
+          <hr/>
+          <h2 id="section3">Steps</h2>
+          #foreach ($step in $steps)
+            <h3>$step.getOrder()</h3>
+            <p>$step.getDescription()</p>
+            <div class="ui attached segment">
+              <!--图片区域-->
+              <img src="$step.getStepImage()" alt="" class="ui fluid rounded image">
+            </div>
+          #end
+          <hr/>
+          <h2 id="section4">Tags</h2>
+          #foreach($tag in $tags)
+          <div class="right aligned five wide column">
+              <span class="ui teal basic label m-padded-tiny m-text-thin">$tag.getName()</span>
+          </div>
+          #end
+      </div>
+      <hr/>   
+      #if($user.getUserId() == $recipe.getUserName())
+      <div class="ui right aligned container">
+        <form type="hidden" method="get" action="/update/$recipe.getRecipeId()">
+          <button type = "submit" class="ui positive button" name="update" id="update">Update</button>
+        </form>
+        <form type="hidden" method="post" action="/delete/$recipe.getRecipeId()">
+          <button type = "submit" class="ui negative button" name="delete" id="delete">Delete</button>
+        </form>
+      </div>
+      #end
+      <hr/>   
+      <div class="ui attached positive message" th:if="${blog.shareStatement}">
+        <!--留言区域列表-->
+        <div id="comment-container"  class="ui teal segment">
+          <div th:fragment="commentList">
+            <div class="ui threaded comments" style="max-width: 100%;">
+              <h3 class="ui dividing header">Review</h3>
+              
+              #foreach($i in [0..$end])
+              
+              <div class="comment">
+               #if($end != -1)
+                <a class="avatar">
+                  <img src="$user.getUserImage()" th:src="@{${comment.avatar}}">
+                </a>
+                #end
+                #if($end == -1)
+                #end
+                <div class="content">
+                #if($end != -1)
+                  <a class="author" >
+                    <span>$reviews.get($i).getUserId()</span>
+                  </a>
+                  
+                #end
+
+                #if($end == -1)
+                <a class="author" >
+                    <span></span>
+                  </a>
+                #end
+                #if($end != -1)
+                  <div class="metadata">
+                    <span class="date" th:text="${#dates.format(comment.createTime,'yyyy-MM-dd HH:mm')}">$reviews.get($i).getDate()</span>
+                  </div>
+                #end
+                #if($end == -1)
+                  <div class="metadata">
+                    <span class="date" th:text="${#dates.format(comment.createTime,'yyyy-MM-dd HH:mm')}"></span>
+                  </div>
+
+                #end
+                
+                #if($end != -1)
+                  <div class="text" th:text="${comment.content}" style = "margin-top:0.7em;">
+                    <div class="metadata" style = "margin-left:-0.7em;">
+                      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+                        #foreach($rating in [1..$reviews.get($i).getRating()])
+                        <span class="fa fa-star checked" align = "left"></span>
+                        #end
+                        #if($reviews.get($i).getRating() < 5)
+                        #foreach($rating in [$reviews.get($i).getRating()..4])
+                        <span class="fa fa-star" align = "left"></span>
+                        #end
+                        #end
+                    </div>
+
+                    <div class = "show content">
+                    $reviews.get($i).getContent()
+                    </div>
+                  </div>
+                #end
+                #if($end == -1)
+                    <div class="metadata" style = "margin-left:-0.7em;">
+                      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+                    </div>
+                #end
+
+                #if($end == -1)
+                  <div class="text" th:text="${comment.content}">
+                  </div>
+                #end
+                #if($end != -1)
+                  <form id="delete_comment" action="/deletereview/$i" method="post" class="delete_comment">
+                    <input style="display: none;" name="review+$i" value="$reviews.get($i).getreviewId()"></input>
+                    <input style="display: none;" name="recipeIdInReview" value="$recipe.getRecipeId()"></input>
+                    <input style="display: none;" name="totalnumber" value="$end"></input>
+                    <button type = "submit" class="delete_comment" name = "delete_comment"  id = "delete_comment">Delete</button>
+                  </form>
+
+                #end
+              
+              </div>
+
+                #end
+                
+
+            </div>
+          </div>
+        </div>
+
+        <div class="ui form">
+          <form id="review-form" action="/recipe-review" method="post" class="ui form">
+            <input style="display: none;" name="recipeId" value="$recipe.getRecipeId()"></input>
+            <input type="hidden" name="parentComment.id" value="-1">
+            <div class="content_field">
+              <label id = "reply">Reply:</label>
+              <textarea class = "content_field" id = "content" name="content" placeholder="Reply here..."></textarea>
+            </div>
+            <br>
+            <br >
+            <div class = "rating_field">
+              <style>
+              .checked {
+                color: orange;
+              }
+              </style>
+
+              <span class="fa fa-star checked" style=""></span>
+              <div class = "show_rating">
+                <input class = "rating_field" id = "rating" type = "text" name = "rating" placeholder = "5" maxlength="1" size="2"/> 
+              </div>            
+            </div>
+            <style>
+                    .show_username{
+                      margin-left:20px;
+                      margin-top:-20px;
+                    }
+                    .checked{
+                      margin-left:1px;
+                      margin-top:10px;
+                    }
+                    .username_field{
+                      width: 150px;
+                      margin-top: 30px;
+                    }
+                    .show_rating{
+                      margin-left: 20px;
+                      margin-top: -25px;
+                      width: 100px;
+                    }
+                    .reply_button{
+                    margin-top: -37px;
+                    }
+                    </style>
+            <div class="field m-mobile-wide m-margin-bottom-small">
+              
+                <div class = "username_field">
+                  <i class="user icon" ></i>
+
+                  <div class = "show_username">
+                    <input class = "username_field" id = "username" type="text" name="username" placeholder="Name"/>
+                  </div>
+
+                </div>
+                
+              </div>
+            <div class="field  m-margin-bottom-small m-mobile-wide" align= "right">   
+              <div class = "reply_button">         
+                <button id="commentpost-btn" type="button" class="ui teal button m-mobile-wide" ><i class="edit icon"></i>Reply</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="toolbar" class="m-padded m-fixed m-right-bottom" style="display: none">
+    <div class="ui vertical icon buttons ">
+      <button type="button" class="ui toc teal button" >目录</button>
+      <a href="#comment-container" class="ui teal button" >留言</a>
+      <button class="ui wechat icon button"><i class="weixin icon"></i></button>
+      <div id="toTop-button" class="ui icon button" ><i class="chevron up icon"></i></div>
+    </div>
+  </div>
+
+  <div class="ui toc-container flowing popup transition hidden" style="width: 250px!important;">
+    <ol class="js-toc">
+
+    </ol>
+  </div>
+
+  <div id="qrcode" class="ui wechat-qr flowing popup transition hidden "style="width: 130px !important;">
+    <!--<img src="./static/images/wechat.jpg" alt="" class="ui rounded image" style="width: 120px !important;">-->
+  </div>
+
+
+
+  <br>
+  <br>
+
+  <!--/*/<th:block th:replace="_fragments :: script">/*/-->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/jquery.scrollto@2.1.2/jquery.scrollTo.min.js"></script>
+  <!--/*/</th:block>/*/-->
+<script src="../static/lib/prism/prism.js"></script>
+<script src="../static/lib/tocbot/tocbot.min.js"></script>
+<script src="../static/lib/qrcode/qrcode.min.js"></script>
+<script src="../static/lib/waypoints/jquery.waypoints.min.js"></script>
+ 
+<script type="text/javascript">
+
+      $(document).on("click", "#commentpost-btn", function () {
+      $(".content_field").attr("name","content");
+      $(".rating_field").attr("name","rating");
+      $(".username_field").attr("name","username");
+      });
+
+</script>
+
+<script>
+  $("#commentpost-btn").click(function () {
+        $('[name="published"]').val(true);
+        $("#review-form").submit();
+      });
+    </script>
+
+    <script>
+      $("input:text").click(function () {
+        $(this).parent().find("input:file").click();
+      });
+  </script>
+  <script>
+    $('.avatar').width(30);
+    $('.avatar').height(30);
+    $('.menu.toggle').click(function () {
+      $('.m-item').toggleClass('m-mobile-hide');
+    });
+
+    $('#payButton').popup({
+      popup : $('.payQR.popup'),
+      on : 'click',
+      position: 'bottom center'
+    });
+
+    tocbot.init({
+      // Where to render the table of contents.
+      tocSelector: '.js-toc',
+      // Where to grab the headings to build the table of contents.
+      contentSelector: '.js-toc-content',
+      // Which headings to grab inside of the contentSelector element.
+      headingSelector: 'h1, h2, h3',
+    });
+
+    $('.toc.button').popup({
+      popup : $('.toc-container.popup'),
+      on : 'click',
+      position: 'left center'
+    });
+
+    $('.wechat').popup({
+      popup : $('.wechat-qr'),
+      position: 'left center'
+    });
+
+    var serurl = /*[[#{blog.serurl}]]*/"127.0.0.1:8080";
+    var url = /*[[@{/blog/{id}(id=${blog.id})}]]*/"";
+    var qrcode = new QRCode("qrcode", {
+      text: serurl+url,
+      width: 110,
+      height: 110,
+      colorDark : "#000000",
+      colorLight : "#ffffff",
+      correctLevel : QRCode.CorrectLevel.H
+    });
+    
+    $('#toTop-button').click(function () {
+      $(window).scrollTo(0,500);
+    });
+
+
+    var waypoint = new Waypoint({
+      element: document.getElementById('waypoint'),
+      handler: function(direction) {
+        if (direction == 'down') {
+          $('#toolbar').show(100);
+        } else {
+          $('#toolbar').hide(500);
+        }
+        console.log('Scrolled to waypoint!  ' + direction);
+      }
+    })
+
+
+    //评论表单验证
+    $('.ui.form').form({
+      fields: {
+        content: {
+          identifier: 'content',
+          rules: [{
+            type: 'empty',
+            prompt: 'Please enter review'
+          }
+          ]
+        },
+        username: {
+          identifier: 'username',
+          rules: [{
+            type: 'empty',
+            prompt: 'Please enter your name'
+          }]
+        },
+
+        rating: {
+          identifier: 'rating',
+          rules: [{
+            type: 'empty',
+            prompt: '请填写正确的邮箱地址'
+          }]
+        }
+      }
+    });
+
+    $(function () {
+      $("#comment-container").load(/*[[@{/comments/{id}(id=${blog.id})}]]*/"comments/6");
+    });
+
+
+
+    $('#commentpost-btn').click(function () {
+      var boo = $('.ui.form').form('validate form');
+      if (boo) {
+        console.log('校验成功');
+        postData();
+      } else {
+        console.log('校验失败');
+      }
+
+    });
+    
+
+    function clearContent() {
+      $("[name='content']").val('');
+      $("[name='parentComment.id']").val(-1);
+      $("[name='content']").attr("placeholder", "请输入评论信息...");
+    }
+
+
+    function reply(obj) {
+      var commentId = $(obj).data('commentid');
+      var commentNickname = $(obj).data('commentnickname');
+      $("[name='parentComment.id']").val(commentId);
+      $(window).scrollTo($('#comment-form'),500);
+    }
+
+      </script>
+      

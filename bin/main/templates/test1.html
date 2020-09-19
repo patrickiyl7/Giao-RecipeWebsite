@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="../../static/lib/editormd/css/editormd.min.css"
+    />
+    <link rel="stylesheet" href="../../static/css/me.css" />
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js"></script>
+    <title>My Application</title>
+  </head>
+  <body>
+    <div class="m-container m-padded-tb-big">
+      <div class="ui container">
+        <form
+          id="blog-form"
+          action="#"
+          th:object="${blog}"
+          th:action="@{/admin/blogs}"
+          method="post"
+          class="ui form"
+        >
+          <div class="required field">
+            <div class="required field">
+              <div class="ui left labeled action input">
+                <label class="ui compact teal basic label">Title</label>
+                <div class="ui input">
+                  <input type="text" name="title" th:value="*{title}" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="required field">
+            <textarea
+              name="description"
+              placeholder="Description..."
+              maxlength="200"
+            ></textarea>
+          </div>
+          <h2>Ingredients</h2>
+          <div class="ingredients">
+            <div class="three fields ingredient-field" style="display:none;">
+              <div class="ten wide field">
+                <div class="ui left labeled action input">
+                  <label class="ui compact teal basic label">Name</label>
+                  <div class="ui input">
+                    <input
+                      type="text"
+                      name="ingredient_name"
+                      th:value="*{title}"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div class="three wide field">
+                <div class="ui left labeled action input">
+                  <label class="ui compact teal basic label">Quantity</label>
+                  <div class="ui input">
+                    <input type="text" name="quantity" th:value="*{title}" />
+                  </div>
+                </div>
+              </div>
+
+              <div class="three wide field">
+                <div class="ui left labeled action input">
+                  <label class="ui compact teal basic label">Unit</label>
+                  <div class="ui input">
+                    <input type="text" name="unit" th:value="*{title}" />
+                  </div>
+                </div>
+              </div>
+              <button type="button" class="ingredient-rm-btn ui red button">
+                Remove
+              </button>
+            </div>
+          </div>
+
+          <div class="ui right aligned container">
+            <button type="button" class="ingredient-btn ui primary button">
+              Add Another
+            </button>
+          </div>
+
+          <h2>Steps</h2>
+          <div class="steps">
+            <div class="required field step-field" style="display:none;">
+              <div class="ui left labeled input">
+                <label class="ui teal basic label">Step</label>
+                <input type="text" name="step" th:value="*{firstPicture}" />
+              </div>
+              <div class="ui right aligned container">
+                <br />
+                <button type="button" class="step-rm-btn ui red button">
+                  Remove
+                </button>
+              </div>
+            </div>
+            <br />
+          </div>
+
+          <br />
+          <div class="ui right aligned container">
+            <button type="button" class="ui primary button step-btn">
+              Add Another
+            </button>
+          </div>
+
+          <br />
+          <br />
+          <div class="ui right aligned container">
+            <button
+              type="button"
+              class="ui button"
+              onclick="window.history.go(-1)"
+            >
+              Return
+            </button>
+            <button type="button" id="save-btn" class="ui secondary button">
+              Save
+            </button>
+            <button type="button" id="publish-btn" class="ui teal button">
+              Submit
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <script>
+      window.onload = function() {
+        $(".ui.dropdown").dropdown();
+      };
+    </script>
+    <script type="text/javascript">
+      $(document).on("click", ".ingredient-btn", function() {
+        var row = $(".ingredient-field")
+          .eq(0)
+          .clone()
+          .show();
+        $(".ingredients").append(row);
+      });
+      $(document).on("click", ".step-btn", function() {
+        var row = $(".step-field")
+          .eq(0)
+          .clone()
+          .show();
+        $(".steps").append(row);
+      });
+      $(document).on("click", ".step-rm-btn", function() {
+        var index = $(".step-rm-btn").index(this);
+        console.log(index);
+        $(".step-field")
+          .eq(index)
+          .remove();
+      });
+      $(document).on("click", ".ingredient-rm-btn", function() {
+        var index = $(".ingredient-rm-btn").index(this);
+        console.log(index);
+        $(".ingredient-field")
+          .eq(index)
+          .remove();
+      });
+    </script>
+  </body>
+</html>

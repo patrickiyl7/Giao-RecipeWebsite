@@ -1,0 +1,326 @@
+   <div class="m-container m-padded-tb-big">
+      <div class="ui container">
+        <form id="recipe-form" enctype="multipart/form-data" action="/update/$recipe.getRecipeId()" method="post" class="ui form">
+          <input
+            style="display: none;"
+            name="ingredient-max"
+            id="ingredient-max"
+            value="0"
+          />
+          <input
+            style="display: none;"
+            name="step-max"
+            id="step-max"
+            value="0"
+          />
+          <input
+            style="display: none;"
+            name="date"
+            id="date"
+            value="mm-dd-year"
+          />
+
+          <input
+            style="display: none;"
+            name="tag-max"
+            id="tag-max"
+            value="0"
+          />
+          #if($error)
+            <div class="ui negative message">
+              <p>
+                $error
+              </p>
+            </div>
+          #end
+          <div class="ui error message"></div>  
+          <div class="required field">
+            <div class="required field">
+              <div class="ui left labeled action input">
+                <label class="ui compact teal basic label">Title</label>
+                <div class="ui input">
+                  <input type="text" name="title" value="$recipe.getTitle()"/>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="required field">
+            <div class="required field">
+              <div class="ui left labeled action input">
+                <label class="ui compact teal basic label">Final Image</label>
+                <input type="file" name="final_image" />
+                <div class="ui icon button">
+                  <i class="attach icon"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="required field">
+            <div class="required field">
+              <textarea name="description" placeholder="Description..." maxlength="200">${recipe.getDescription()}</textarea>
+            </div>
+          </div>
+          
+          <h2 style="color:white">Ingredients</h2>
+          
+          <div class="ingredients">
+            <div class="three fields ingredient-field" style="display: none;">
+              <div class="ten wide required field">
+                <div class="ui left labeled action input">
+                  <label class="ui compact teal basic label">Name</label>
+                  <div class="ui input">
+                    <input
+                      class="ingredient_name"
+                      type="text"
+                      name="ingredient_name"
+                      id="ingredient_name"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div class="three wide required field">
+                <div class="ui left labeled action input">
+                  <label class="ui compact teal basic label">Quantity</label>
+                  <div class="ui input">
+                    <input
+                      type="text"
+                      class="quantity"
+                      name="quantity"
+                      id="quantity"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div class="three wide field">
+                <div class="ui left labeled action input">
+                  <label class="ui compact teal basic label">Unit</label>
+                  <div class="ui input">
+                    <input type="text" class="unit" name="unit" id="unit" />
+                  </div>
+                </div>
+              </div>
+              <button type="button" class="ingredient-rm-btn ui red button">
+                Remove
+              </button>
+            </div>
+          </div>
+
+          <div class="ui right aligned container">
+            <button type="button" class="ingredient-btn ui primary button">
+              Add Another
+            </button>
+          </div>
+
+          <h2 style="color:white">Steps</h2>
+          <div class="steps">
+            <div class="required field step-field" style="display: none;">
+              <div class="ui left labeled input">
+                <label class="ui teal basic label">Step</label>
+                <input type="text" class="step" name="step" />
+              </div>
+              <br />
+              <br />
+              <div class="ui left labeled action input">
+                <label class="ui compact teal basic label">Step Image</label>
+                <input type="file" class="step_image" name="step_image" />
+                <div class="ui icon button">
+                  <i class="attach icon"></i>
+                </div>
+              </div>
+              <div class="ui right aligned container">
+                <br />
+                <button type="button" class="step-rm-btn ui red button">
+                  Remove
+                </button>
+              </div>
+            </div>
+            <br />
+          </div>
+
+          <br />
+          <div class="ui right aligned container">
+            <button type="button" class="ui primary button step-btn">
+              Add Another
+            </button>
+          </div>
+
+          <h2 style="color:white">Tags</h2>
+          <div class="tags">
+            <div class="required field tag-field" style="display: none;">
+              <div class="ui left labeled input">
+                <label class="ui teal basic label">Tag</label>
+                <input type="text" class="tag" name="tag" />
+              </div>
+              <div class="ui right aligned container">
+                <br />
+                <button type="button" class="tag-rm-btn ui red button">
+                  Remove
+                </button>
+              </div>
+            </div>
+            <br />
+          </div>
+
+          <br />
+          <div class="ui right aligned container">
+            <button type="button" class="ui primary button tag-btn">
+              Add Another
+            </button>
+          </div>
+          <br />
+          <br />
+
+          <div class="ui right aligned container">
+            <button
+              type="button"
+              class="ui button"
+              onclick="window.history.go(-1)"
+            >
+              Return
+            </button>
+            <button type="button" id="publish-btn" class="ui teal button">
+              Submit
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <script>
+      window.onload = function () {
+        $(".ui.dropdown").dropdown();
+      };
+    </script>
+    <script type="text/javascript">
+      $(document).on("click", ".ingredient-btn", function () {
+        var row = $(".ingredient-field").eq(0).clone().show();
+        $(".ingredients").append(row);
+        var idx = parseInt($("#ingredient-max").val()) + 1;
+        $("#ingredient-max").val(idx.toString());
+        row.find(".ingredient_name").attr("name", "ingredient_name" + idx);
+        row.find(".quantity").attr("name", "quantity" + idx);
+        row.find(".unit").attr("name", "unit" + idx);
+      });
+      $(document).on("click", ".step-btn", function () {
+        var row = $(".step-field").eq(0).clone().show();
+        $(".steps").append(row);
+        var idx = parseInt($("#step-max").val()) + 1;
+        $("#step-max").val(idx.toString());
+        row.find(".step").attr("name", "step" + idx);
+        row.find(".step_image").attr("name", "step_image" + idx);
+      });
+      $(document).on("click", ".step-rm-btn", function () {
+        var index = $(".step-rm-btn").index(this);
+        var max = parseInt($("#step-max").val());
+        $(".step-field").eq(index).remove();
+        for (i = index + 1; i <= max; i++) {
+          $("input[name = " + "step" + i.toString() + "]").attr(
+            "name",
+            "step" + (i - 1).toString()
+          );
+        }
+        $("#step-max").val((max - 1).toString());
+      });
+
+      $(document).on("click", ".ingredient-rm-btn", function () {
+        var index = $(".ingredient-rm-btn").index(this);
+        $(".ingredient-field").eq(index).remove();
+        var max = parseInt($("#ingredient-max").val());
+        for (i = index + 1; i <= max; i++) {
+          $("input[name = " + "ingredient_name" + i.toString() + "]").attr(
+            "name",
+            "ingredient_name" + (i - 1).toString()
+          );
+          $("input[name = " + "quantity" + i.toString() + "]").attr(
+            "name",
+            "quantity" + (i - 1).toString()
+          );
+          $("input[name = " + "unit" + i.toString() + "]").attr(
+            "name",
+            "unit" + (i - 1).toString()
+          );
+        }
+        $("#ingredient-max").val((max - 1).toString());
+      });
+
+      $(document).on("click", ".tag-btn", function () {
+        var row = $(".tag-field").eq(0).clone().show();
+        $(".tags").append(row);
+        var idx = parseInt($("#tag-max").val()) + 1;
+        $("#tag-max").val(idx.toString());
+        row.find(".tag").attr("name", "tag" + idx);
+      });
+      $(document).on("click", ".tag-rm-btn", function () {
+        var index = $(".tag-rm-btn").index(this);
+        var max = parseInt($("#tag-max").val());
+        $(".tag-field").eq(index).remove();
+        for (i = index + 1; i <= max; i++) {
+          $("input[name = " + "tag" + i.toString() + "]").attr(
+            "name",
+            "step" + (i - 1).toString()
+          );
+        }
+        $("#tag-max").val((max - 1).toString());
+      });
+
+      $("#save-btn").click(function () {
+        $('[name="published"]').val(false);
+        $("#recipe-form").submit();
+      });
+
+      $("#publish-btn").click(function () {
+        $('[name="published"]').val(true);
+        var d = new Date();
+        var month = d.getMonth() + 1;
+        var day = d.getDate();
+        var year = d.getFullYear();
+        var dateString =
+          (month < 10 ? "0" : "") +
+          month +
+          "-" +
+          (day < 10 ? "0" : "") +
+          day +
+          "-" +
+          year.toString();
+        $("#date").val(dateString);
+        $("#recipe-form").submit();
+      });
+    </script>
+    <script>
+      $("input:text").click(function () {
+        $(this).parent().find("input:file").click();
+      });
+
+      $("input:file", ".ui.action.input").on("change", function (e) {
+        var name = e.target.files[0].name;
+        $("input:text", $(e.target).parent()).val(name);
+      });
+      $('.ui.form').form({
+        fields : {
+          title : {
+            identifier: 'title',
+            rules: [{
+              type : 'empty',
+              prompt: 'Please enter your recipe title.'
+            }]
+          },
+          final_image : {
+            identifier: 'final_image',
+            rules: [{
+              type : 'empty',
+              prompt: 'Please attach your final image of your dish.'
+            }]
+          },
+          description : {
+            identifier: 'title',
+            rules: [{
+              type : 'empty',
+              prompt: 'Please enter your recipe description.'
+            }]
+          },
+        }
+    });
+    </script>

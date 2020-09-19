@@ -1,0 +1,53 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js"></script>
+    <title>My Application</title>
+  </head>
+  <body>
+    <style>
+        body {
+            background-image:url("http://nextrestaurants.com/wp-content/uploads/2019/10/Restaurant-Instagram-Photography.png");
+            background-size:cover;
+            }
+    </style>
+    <header>
+        <nav class="ui inverted attached segment m-padded-tb-mini m-shadow-small" >
+            <div class="ui container">
+                <div class="ui inverted secondary stackable menu">
+                    <a href="/index" class="ui teal header item">Giao Recipe</a>
+                    #if($user)
+                    <a href="/myrecipe" class=" m-item item m-mobile-hide"><i class="home icon"></i>My Recipes</a>
+                    <a href="/recipe" class="m-item item m-mobile-hide"><i class="idea icon"></i>Create a New Recipe</a>
+                    #end
+                    <div class="right m-item item m-mobile-hide">
+                        <div class="ui icon inverted transparent input m-margin-tb-tiny">
+                            <input type="text" id="search" placeholder="Search....">
+                            <i id="search-icon"class="search link icon"></i>
+                        </div>
+                    </div>
+                    #if(!$user)
+                    <a href="/login" class=" m-item item m-mobile-hide"><i class="sign in alternate icon"></i>Sign In</a>
+                    #else
+                    <a href="/profile/$user.getUserId()" class=" m-item item m-mobile-hide"><i class="address book icon"></i>Sign Out</a>
+                    #end
+                </div>
+            </div>
+        </nav>
+    </header>
+    <br>
+    <br>
+        #parse( $template )
+  <!--/*/<th:block th:replace="_fragments :: script">/*/-->
+    <script>
+        $("#search-icon").click(function(ev){
+        var param = $("#search").val();
+        window.location.replace("/search/"+param);
+        })  
+  </script>
+  
+  </body>
+</html>

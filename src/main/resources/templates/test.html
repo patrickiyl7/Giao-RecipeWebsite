@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script type="text/javascript" src="jquery-3.2.1.min.js"></script>
+  </head>
+  <body>
+    <div class="m-container m-padded-tb-big">
+      <div class="ui container">
+        <input type="hidden" name="published" th:value="*{published}" />
+        <input type="hidden" name="id" th:value="*{id}" />
+        <div class="required field">
+          <div class="ui left labeled input">
+            <input
+              type="text"
+              name="title"
+              placeholder="title"
+              th:value="*{title}"
+            />
+          </div>
+        </div>
+        <div class="element-wrapper">
+          <div class="row">
+            <input type="text" />
+            <button type="button" class="btn-remove-row">
+              Remove Row
+            </button>
+          </div>
+        </div>
+        <button type="button" class="btn-add-row">
+          Add New Row
+        </button>
+        <div class="required field">
+          <div id="md-content" style="z-index: 1 !important;">
+            <textarea
+              placeholder="博客内容"
+              name="content"
+              style="display: none"
+              th:text="*{content}"
+            ></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      window.onload = function() {
+        $(".ui.dropdown").dropdown();
+      };
+    </script>
+    <script type="text/javascript">
+      $(document).on("click", ".btn-add-row", function() {
+        var row = $(".row")
+          .eq(0)
+          .clone()
+          .show();
+        $(".element-wrapper").append(row);
+      });
+      $(document).on("click", ".btn-remove-row", function() {
+        var index = $(".btn-remove-row").index(this);
+        $(".row")
+          .eq(index)
+          .remove();
+      });
+    </script>
+  </body>
+</html>
